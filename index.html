@@ -1,0 +1,150 @@
+<html>
+    <head>
+        <title>Website Page Design</title>
+        <link rel="stylesheet" href="style.css">
+
+        <link rel="stylesheet" type="text/css" href="./style.css" />
+        <script src="./app.js"></script>
+        
+        
+
+       </head>
+<body>
+    <div class="hero">
+        <div class="navbar">
+            <img src="images/logo.png" class="logo">
+            <button type="button">Sign Up</button>
+            <button type="button">About Us</button>
+        </div>
+
+        <div class="content">
+            <small>Welcome </small> 
+            <h1>Where's your<br>Next Dream Home?</h1>
+            
+            <input
+                id="pac-input"
+                class="controls"
+                type="text"
+                placeholder="Type your dream destination"
+            />
+            <div id="map"></div>
+
+            <ul class="geo-data">
+                <br>
+                <li>Full Address: <span id="location"></span></li>
+                <li>Postal Code: <span id="postal_code"></span></li>
+                <li>Country: <span id="country"></span></li>
+                <li>Latitude: <span id="lat"></span></li>
+                <li>Longitude: <span id="lon"></span></li>
+
+            </ul>
+
+            <!-- Google Maps JavaScript API-->
+            <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyB1w-ds6th1rvdWJRkX1S2Y6nzQsinsKa0&callback=initMap" async defer></script>
+
+            <script>
+            function initMap(){
+                var map = new google.mpas.Map(document.getElementById('map'), {
+                    center: {lat: -33.8688, lng: 151.2195},
+                    zoom: 13
+                });
+                var input = document.getElementById('searchInput');
+                map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+                var autocomplete = new google.maps.places.Autocomplete(input);
+                autocomplete.bindTo('bounds', map);
+
+                var infowindow = new google.maps.InfoWindow();
+                var marker = new google.maps.Marker{{
+                    map: map,
+                    anchorPoint: new google.maps.Point(0, -29)
+                }};
+
+                autocomplete.addListener('place_changed', function() {
+                    infowindow.close();
+                    marker.setVisible(false);
+                    var place = autocomplete.getPlace();
+                    if (!place.geometry) {
+                        window.alert("Autocomplete's returned place contains no geometry");
+                        return;
+                    }
+                
+                    // If the place has a geometry, then present it on a map.
+                    if (place.geometry.viewpoint) {
+                        map.fitBounds(place.geometry.viewpoint);
+                    }else{
+                        map.setCenter(place.geometry.location);
+                        map.setZoom(17);
+                    }
+                    marker.setIcon(({
+                        url: place.icon,
+                        size: new google.maps.Size(71,71),
+                        origin: new google.maps.Point(0,0),
+                        anchor: new google.maps.Point(17,34),
+                        scaledSize: new google.maps.Size(35,35)
+                    }));
+                    marker.setPosition(place.geometry.location);
+                    marker.setVisible(true);
+
+                    var address = '';v 
+                    if (place.address_components) {
+                        address = [
+                        (place.address_components[0] && place.address_components[0].short_name || ''),
+                        (place.address_components[1] && place.address_components[1].short_name || ''),
+                        (place.address_components[2] && place.address_components[2].short_name || '')
+                        ].join(' ');
+                    }
+                
+                    infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+                    infowindow.open(map, marker);
+                
+                    // Location details
+                    for (var i = 0; i < place.address_components.length; i++) {
+                        if(place.address_components[i].types[0] == 'postal_code'){
+                            document.getElementById('postal_code').innerHTML = place.address_components[i].long_name;
+                        }
+                        if(place.address_components[i].types[0] == 'country'){
+                            document.getElementById('country').innerHTML = place.address_components[i].long_name;
+                        }
+                    }
+                    document.getElementById('location').innerHTML = place.formatted_address;
+                    document.getElementById('lat').innerHTML = place.geometry.location.lat();
+                    document.getElementById('lon').innerHTML = place.geometry.location.lng();
+                });
+            }
+            </script>
+            
+            <br><br><br>
+            <button type="button">Take a tour</button>
+        </div>
+
+        <div class="side-bar">
+            <img src="images/menu.png" class="menu">
+            
+
+            <div class="social-links">
+                <a href="http://facebook.com" target="_blank"><img src="images/fb.png"></a>
+                <img src="images/ig.png">
+                <img src="images/tw.png">
+            </div>
+            
+            <div class="useful-links">
+                <img src="images/share.png">
+                <img src="images/info.png">
+            </div>
+      
+        </div>
+
+        <div class="bubbles">
+            <img src="images/bubble.png">
+            <img src="images/bubble.png">
+            <img src="images/bubble.png">
+            <img src="images/bubble.png">
+            <img src="images/bubble.png">
+            <img src="images/bubble.png">
+            <img src="images/bubble.png">
+        </div>
+
+    </div>
+</body>
+</html>
